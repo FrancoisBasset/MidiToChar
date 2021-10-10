@@ -1,8 +1,13 @@
 const midi = require('midi');
 const robot = require('robotjs');
 
+const port = 0;
+
 const input = new midi.Input();
-input.openPort(0);
+input.openPort(port);
+
+console.log('Port: ' + port);
+console.log(input.getPortName(port));
 
 const chars = {
 	48: 'a',
@@ -39,8 +44,6 @@ var char = '';
 input.on('message', (deltaTime, message) => {
 	const mode = message[0];
 	const key = message[1];
-
-	console.log(key);
 	
 	if (mode == 128) {
 		clearInterval(timer);
@@ -50,12 +53,16 @@ input.on('message', (deltaTime, message) => {
 	if (mode == 144) {
 		if (key == 73) {
 			robot.keyTap('backspace');
+			console.log('Backspace');
 		} else if (key == 75) {
 			robot.keyTap('enter');
+			console.log('Enter');
 		} else if (key == 78) {
 			robot.keyTap('space');
+			console.log('Space');
 		} else {
-			char = chars[key]
+			char = chars[key];
+			console.log('Char: ' + char);
 			robot.typeString(char);
 
 			if (timer != null) {
